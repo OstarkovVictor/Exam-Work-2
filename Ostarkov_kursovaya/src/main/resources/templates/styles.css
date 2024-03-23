@@ -1,0 +1,130 @@
+/* styles.css */
+
+body {
+    background-color: #ebebeb;
+    position: relative;
+}
+
+.container {
+    margin-top: 20px;
+    border-radius: 15px; /* Округленные углы */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Тень */
+    padding: 20px;
+    background-color: #f8f9fa; /* Цвет фона контейнера */
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.nav-link {
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.container {
+    margin-top: 60px;
+}
+
+h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+.btn-secondary {
+    font-size: 18px;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.welcome-text {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.login-register-text {
+    font-size: 18px;
+    text-align: center; /* Выравнивание по центру */
+    color: #007bff; /* Цвет ссылки Bootstrap Blue */
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    font-size: 36px;
+    margin-right: 10px;
+}
+.card-header {
+    background-color: #007bff; /* Цвет фона заголовка карточки */
+    color: #ffffff; /* Цвет текста заголовка карточки */
+    text-align: center;
+    padding: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.card-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    font-size: 16px;
+}
+
+.btn-primary {
+    font-size: 18px;
+}
+
+.footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #6c757d; /* Серый цвет для текста подвала */
+}
+
+.top-margin {
+    margin-top: 60px;
+}
+
+#usersTable td:last-child {
+    max-width: 100px; /* Задайте желаемую максимальную ширину */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+

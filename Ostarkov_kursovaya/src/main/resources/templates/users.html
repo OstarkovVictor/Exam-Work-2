@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Таблица пользователей</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <style>
+        body {
+            background-color: #ebebeb; /* Цвет фона */
+            position: relative;
+        }
+
+        .container {
+            margin-top: 20px;
+            border-radius: 15px; /* Округленные углы */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Тень */
+            padding: 20px;
+            background-color: #f8f9fa; /* Цвет фона контейнера */
+        }
+
+        .navbar {
+            margin-bottom: 20px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-nav {
+            margin-left: auto;
+        }
+
+        .nav-link {
+            font-size: 18px;
+            color: #ffffff; /* Цвет текста ссылок в навигационной панели */
+        }
+
+        .container {
+            margin-top: 60px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+
+        .user-info {
+            font-size: 12px; /* Уменьшаем размер текста информации о пользователе */
+            color: #888; /* Используем серый цвет для текста */
+            margin-top: -10px; /* Уменьшаем верхний отступ */
+            margin-right: 20px; /* Добавляем отступ справа */
+
+        }
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid justify-content-end">
+        <a class="navbar-brand" th:href="@{/index}">
+            <i class="bi bi-slash-square"></i> С.У.П.
+        </a>        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/users' ? 'active' : ''}"
+                    th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a class="nav-link" th:href="@{/users}">
+                        <i class="bi bi-person"></i> Пользователи
+                    </a>
+                </li>
+                <li class="nav-item divider"></li>
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/user-actions' ? 'active' : ''}"
+                    th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a class="nav-link" th:href="@{/user-actions}">
+                        <i class="bi bi-journal"></i> Логи
+                    </a>
+                </li>
+                <li class="nav-item divider"></li>
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/staff' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/staff}">
+                        <i class="bi bi-person-list"></i> Список сотрудников
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/about}">О приложении</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Выход</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <!-- Информация о залогинившемся пользователе -->
+    <div class="user-info">
+        Привет, <span th:text="${#authentication.principal.username}"></span>!
+    </div>
+
+    <div class="top-margin"></div>
+    <div class="container">
+        <div class="row col-md-8 offset-md-2">
+            <h2>Пользователи</h2>
+        </div>
+        <hr/>
+        <a th:href="@{/user-actions}" class="btn btn-primary">Лог действий</a>
+        <hr/>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="usersTable">
+                <thead class="table-dark">
+                <tr>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Email</th>
+                    <th>Роль</th>
+                    <th>Применить роль</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.roles}"></td>
+                    <td>
+                        <a th:href="@{/addRole(userEmail=${user.email}, roleName='ROLE_ADMIN')}" class="btn btn-outline-primary">Admin</a>
+                        <a th:href="@{/addRole(userEmail=${user.email}, roleName='ROLE_READ')}" class="btn btn-outline-primary">Read</a>
+                        <a th:href="@{/addRole(userEmail=${user.email}, roleName='ROLE_USER')}" class="btn btn-outline-primary">User</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Подключение jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Подключение DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
+    <!-- JavaScript-код для инициализации DataTables и кнопки экспорта -->
+    <script>
+        $(document).ready(function () {
+            $('#staffTable').DataTable({
+                dom: '<"d-flex justify-content-between align-items-center"lfB>rtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        className: 'btn btn-sm btn-success', // Уменьшаем размер кнопки Excel
+                        text: 'Экспорт Excel',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'btn btn-sm btn-danger', // Уменьшаем размер кнопки PDF
+                        text: 'Экспорт PDF',
+                    },
+                ],
+                columnDefs: [{
+                    targets: [-1],
+                    orderable: false
+                }],
+                pagingType: 'full_numbers'
+            });
+        });
+
+    </script>
+</body>
+</html>
