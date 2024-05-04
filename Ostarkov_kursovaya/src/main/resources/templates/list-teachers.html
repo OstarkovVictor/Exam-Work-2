@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Таблица пользователей</title>
+    <title>Schedule</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.css"/>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
     <style>
         body {
             background-color: #ebebeb; /* Цвет фона */
@@ -60,24 +59,18 @@
             text-align: center;
         }
 
-
         .user-info {
-            font-size: 12px; /* размер текста информации о пользователе */
-            color: #888; /* серый цвет для текста */
-            margin-top: -10px; /* верхний отступ */
-            margin-right: 20px; /* отступ справа */
-
+            font-size: 12px; /* Уменьшаем размер текста информации о пользователе */
+            color: #888; /* Используем серый цвет для текста */
+            margin-top: -10px; /* Уменьшаем верхний отступ */
+            margin-right: 20px; /* Добавляем отступ справа */
         }
 
     </style>
 </head>
+
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-
-
-
-
     <div class="container-fluid justify-content-end">
         <a class="navbar-brand" th:href="@{/index}">
             <i class="bi bi-pen"></i> Schedule
@@ -89,7 +82,7 @@
             </a>
         </li>
 
-        <li class="nav-item" th:classappend="${#request.getRequestURI() == '/user-actions' ? 'active' : ''}"
+        <li class="nav-item" th:classappend="${#request.getRequestURI() == '/actions' ? 'active' : ''}"
             th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <a class="nav-link" th:href="@{/user-actions}">
                 Logs
@@ -109,8 +102,8 @@
         </li>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
@@ -121,52 +114,54 @@
     </div>
 </nav>
 
+<div class="container">
+    <div class="row col-md-8 offset-md-2">
 
-    <div class="top-margin"></div>
-    <div class="container">
-        <div class="row col-md-8 offset-md-2">
-            <h2>Users</h2>
-        </div>
-        <hr/>
-        <a th:href="@{/user-actions}" class="btn btn-primary">Action log</a>
-        <hr/>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped" id="usersTable">
-                <thead class="table-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Change role</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="user : ${users}">
-                    <td th:text="${user.firstName}"></td>
-                    <td th:text="${user.lastName}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.roles}"></td>
-                    <td>
-                        <a th:href="@{/addRole(userEmail=${user.email}, roleName='ROLE_ADMIN')}" class="btn btn-outline-primary">Admin</a>
-                        <a th:href="@{/addRole(userEmail=${user.email}, roleName='ROLE_READ')}" class="btn btn-outline-primary">Read</a>
-                        <a th:href="@{/addRole(userEmail=${user.email}, roleName='ROLE_USER')}" class="btn btn-outline-primary">User</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        <h2>List Teachers</h2>
+
     </div>
-    <!-- Подключение jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Подключение DataTables -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <hr/>
+    <a th:href="@{/addTeacherForm}" class="btn btn-primary">Add Teacher</a>
+    <hr/>
+    <table class="table table-bordered table-striped" id="teacherTable">
+        <thead class="table-dark">
+        <tr>
+            <th>Teacher name</th>
+            <th>Course</th>
+            <th>Сlassroom</th>
+            <td th:if="${not #authorization.expression('hasRole(''ROLE_READ'')')}">Email</td>
+            <td th:if="${not #authorization.expression('hasRole(''ROLE_READ'')')}">Action</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher: ${teacher}">
+            <td th:text="${teacher.name}" />
+            <td th:text="${teacher.course}" />
+            <td th:text="${teacher.classroom}" />
+            <td th:text="${teacher.email}" />
+<!--            <td th:if="${not #authorization.expression('hasRole(''ROLE_READ'')')}" th:text="${teacher.email}" />-->
+            <td th:if="${not #authorization.expression('hasRole(''ROLE_READ'')')}">
+<!--                <a th:href="@{/showUpdateForm(teacherId=${teacher.id})}" class="btn btn-outline-success">Change</a>-->
+                <a th:href="@{/deleteTeacher(teacherId=${teacher.id})}" class="btn btn-outline-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Подключение скриптов -->
+<!-- Подключение jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Подключение DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
 
 </body>
+
 </html>

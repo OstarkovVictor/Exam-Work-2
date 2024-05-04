@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.ostarkov</groupId>
-    <artifactId>Coursa4ProjectSpringWebApp</artifactId>
+    <artifactId>ProjectSpringBootApplication</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>test-CourseProjectSpringBoot-thymeleaf</name>
     <description>CourseProjectSpringBoot-thymeleaf</description>
@@ -81,7 +81,11 @@
             <artifactId>postgresql</artifactId>
             <version> 42.3.8</version>
         </dependency>
-
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>

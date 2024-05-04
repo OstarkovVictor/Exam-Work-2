@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Shedule</title>
+    <title>Schedule</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
 
     <style>
         body {
@@ -19,13 +18,21 @@
             position: relative;
         }
 
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: bold;
+        .container {
+            margin-top: 1px;
+            border-radius: 15px; /* Округленные углы */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Тень */
+            padding: 20px;
+            background-color: #f8f9fa; /* Цвет фона контейнера */
         }
 
         .navbar {
             margin-bottom: 20px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
         }
 
         .navbar-toggler {
@@ -36,38 +43,51 @@
             margin-left: auto;
         }
 
-        .container {
-            margin-top: 20px;
-            border-radius: 15px; /* Округленные углы */
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Тень */
-            padding: 20px;
-            background-color: #f8f9fa; /* Цвет фона контейнера */
+        .nav-link {
+            font-size: 18px;
+            color: #ffffff; /* Цвет текста ссылок в навигационной панели */
         }
 
-        .welcome-text {
-            font-size: 24px;
+        .container {
+            margin-top: 60px;
+        }
+
+        hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin-top: 20px;
             margin-bottom: 20px;
             text-align: center;
         }
 
-        .login-register-text {
+        .form-control {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .btn-outline-success {
             font-size: 18px;
-            text-align: center; /* Выравнивание по центру */
-            color: #007bff; /* Цвет ссылки Bootstrap Blue */
         }
 
-        .icon-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        a {
+            font-size: 18px;
+            margin-top: 20px;
+            display: inline-block;
         }
 
-        .icon {
-            font-size: 36px;
-            margin-right: 10px;
+        .user-info {
+            font-size: 12px; /* Уменьшаем размер текста информации о пользователе */
+            color: #888; /* Используем серый цвет для текста */
+            margin-top: -10px; /* Уменьшаем верхний отступ */
+            margin-right: 20px; /* Добавляем отступ справа */
+
         }
     </style>
 </head>
+
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid justify-content-end">
@@ -112,32 +132,33 @@
         </div>
     </div>
 </nav>
-<br/><br/>
+
+<!-- Информация о залогинившемся пользователе -->
+
+<div class="top-margin"></div>
 <div class="container">
-    <div class="row">
-        <h1 class="text-center">Schedule</h1>
-        <hr>
-        <!-- Используйте Thymeleaf для проверки, залогинен ли пользователь -->
-        <div th:if="${#authorization.expression('isAuthenticated()')}">
-            <div class="welcome-text">
-                <p>Welcome to web-site</p>
-            </div>
-            <div class="login-register-text">
-                <p class="icon-container"><i class="icon material-icons">list</i><a href="/teachers">To list Teachers</a></p>
-                <!-- Другие ссылки для залогиненных пользователей -->
-            </div>
-        </div>
-        <!-- Если пользователь не залогинен, отображаем текст для входа/регистрации -->
-        <div th:unless="${#authorization.expression('isAuthenticated')}">
-            <div class="welcome-text">
-                <p>Welcome to schedule! Login or sign up to use schedule.</p>
-            </div>
-            <div class="login-register-text">
-                <p class="icon-container"><i class="icon material-icons">login</i><a href="/login"><button type="submit" class="btn btn-primary">login</button></a></p>
-                <p class="icon-container"><i class="icon material-icons">person_add</i><a href="/register"><button type="submit" class="btn btn-primary">Sign up</button></a></p>
-            </div>
-        </div>
-    </div>
+
+
+    <h3>Add Teacher</h3>
+
+    <form  th:action="@{/saveTeacher}" th:object="${teacher}" method="POST">
+
+        <input type="text" field="*{name}" name="name" class="form-control col-4 mb-4" placeholder="Name of Teach"/>
+
+        <input type="text" field="*{course}" name = "course" class="form-control col-4 mb-4" placeholder="Course">
+
+        <input type="text" field="*{classroom}" name = "classroom" class="form-control col-4 mb-4" placeholder="Classroom"/>
+
+        <input type="text" field="*{email}" name = "email" class="form-control col-4 mb-4" placeholder="Email"/>
+
+        <button type="submit" class="btn btn-outline-success">Save</button>
+
+        <input type="hidden" field="*{id}"/>
+
+    </form>
+    <hr/>
+    <a th:href="@{/teachers}">Back to list</a>
 </div>
+
 </body>
 </html>
